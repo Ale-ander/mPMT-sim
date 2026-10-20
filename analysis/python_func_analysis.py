@@ -371,7 +371,7 @@ def plot_trace_signal(geant_file_dir: Path, n_events: int = 5, randomize: bool =
                     plt.show()
 
 if __name__ == "__main__":
-    data_file = "//wsl.localhost/Ubuntu/home/alecs/multipmt-simulation-main/data/2026-10-14/csv/HitsData_PMT_test.csv"
+    data_file = "../data/2026-10-20/csv/HitsData_PMT_test.csv"
     output_file = "outputs/output.csv"
     convert_geant_to_analysis(data_file, output_file)
     # charge_centroid(output_file, multiplicity=2)
