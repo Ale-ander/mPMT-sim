@@ -1,0 +1,19 @@
+# To Create The Environment:
+# mamba env create -f  environment.devenv.yml
+# (if you do not have mamba, type conda instead of mamba)
+
+name: mpmtsim
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - geant4
+  - root
+  - cmake
+  - numpy
+  - matplotlib
+  - pandas
+#To Activate The Environment:
+#conda activate mpmtsim

@@ -1,0 +1,17 @@
+/vis/open OGLSQt
+/vis/viewer/set/viewpointThetaPhi 90 180
+/vis/viewer/zoom 1.4
+/vis/drawVolume
+/vis/scene/add/axes 0 0 0 1 m
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfRunAction accumulate
+/vis/scene/add/hits
+
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set gamma red
+/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+/vis/modeling/trajectories/drawByParticleID-0/set e+ cyan
+/vis/modeling/trajectories/drawByParticleID-0/set mu- green
+/vis/modeling/trajectories/drawByParticleID-0/set mu+ green
+/vis/modeling/trajectories/drawByParticleID-0/set opticalphoton yellow
