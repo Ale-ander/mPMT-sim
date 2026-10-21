@@ -52,14 +52,13 @@ void PrimaryGeneratorAction::LoadFile()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    // Carico al primo evento, così la macro ha già impostato il nome del file
     if (!fLoaded) LoadFile();
 
-    const int id = anEvent->GetEventID() + 1;           // Geant4 parte da 0, CORSIKA da 1
+    const int id = anEvent->GetEventID() + 1;
     auto it = fShowers.find(id);
     if (it == fShowers.end()) {
-        G4Exception("PrimaryGeneratorAction::GeneratePrimaries", "Corsika002", JustWarning,
-                    "No CORSIKA shower for this event: beamOn is larger than the number of showers in the file");
+        G4Exception("PrimaryGeneratorAction::GeneratePrimaries", "Corsika shower", JustWarning,
+                    "No CORSIKA shower for this event");
         return;
     }
 
@@ -72,7 +71,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         const G4double x = p.x * cm;
         const G4double y = p.y * cm;
-        if (std::hypot(x, y) > fRMax) { ++nOut; continue; }   // fuori dal volume utile
+        if (std::hypot(x, y) > fRMax) { ++nOut; continue; }
 
         const G4ThreeVector mom(p.px * GeV, p.py * GeV, p.pz * GeV);
         const G4double pmag = mom.mag();
@@ -91,5 +90,5 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     G4cout << "Event " << anEvent->GetEventID() + 1 << " (CORSIKA shower " << id << "): "
            << nIn << " particles injected, " << nOut << " skipped (r > "
-           << fRMax / m << " m)" << G4endl;
+           << fRMax / m << " m)";
 }

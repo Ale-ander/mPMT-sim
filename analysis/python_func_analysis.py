@@ -180,27 +180,18 @@ def plot_event(idx, pmtID, all_energies, all_times, min_multiplicity=1, time_win
         print("Nessun segnale nell'evento.")
         return
 
-    # 1. Trova il primo tempo (t_0) e applica la finestra temporale
     first_time = np.min(all_times)
     valid_mask = (all_times >= first_time) & (all_times <= first_time + time_window)
-
-    # 2. Filtra i dati entro la finestra temporale
     valid_pmtID = pmtID[valid_mask]
     valid_energies = all_energies[valid_mask]
-
-    # --- NORMALIZZAZIONE TEMPI: Delta t rispetto a t_0 ---
-    valid_times = all_times[valid_mask] - first_time  # Il primo PMT diventa 0.0 ns
-
-    # 3. Controllo Molteplicità
+    valid_times = all_times[valid_mask] - first_time
     multiplicity = len(valid_pmtID)
+
     if multiplicity < min_multiplicity:
-        print(f"Event discarded: multiplicity ({multiplicity}) under value required ({min_multiplicity}).")
+        print(f"Event {idx} discarded: multiplicity ({multiplicity}) under value required ({min_multiplicity}).")
         return
 
-    # Troviamo l'ID del primo PMT (quello che ora ha tempo 0.0)
     first_pmt_id = valid_pmtID[np.argmin(valid_times)]
-
-    # Colormap e Normalizzazione sui tempi normalizzati
     norm = mcolors.Normalize(
         vmin=0.0,
         vmax=time_window
@@ -295,32 +286,6 @@ def plot_event(idx, pmtID, all_energies, all_times, min_multiplicity=1, time_win
         plt.show()
 
 
-def plot_multiple_events(geant_file_dir: Path, n_events: int = 5, randomize: bool = False, SCALE: int = 45, normalize_times: bool = True):
-
-    all_files = sorted(geant_file_dir.rglob("csv/*.csv"))
-    
-    if randomize:
-        chosen_files = random.sample(all_files, min(n_events, len(all_files)))
-    else:
-        chosen_files = all_files[:n_events]
-    
-    for i, file in enumerate(chosen_files):
-        pmtid, energies, times = leggi_evento_csv(file)
-
-        if normalize_times:
-            valid_times = times[times > 0]
-            if len(valid_times) > 0:
-                t_min = np.min(valid_times)
-                times = times - t_min
-        
-        plot_event(
-            pmtid,
-            energies,
-            times,
-            SCALE=SCALE
-        )
-
-
 def plot_trace_signal(geant_file_dir: Path, n_events: int = 5, randomize: bool = False, time_bin: float = 0.1, xlim: int = 30):
 
     all_files = sorted(geant_file_dir.rglob("csv/*.csv"))
@@ -371,19 +336,19 @@ def plot_trace_signal(geant_file_dir: Path, n_events: int = 5, randomize: bool =
                     plt.show()
 
 if __name__ == "__main__":
-    data_file = "../data/2026-10-20/csv/HitsData_PMT_test.csv"
+    data_file = "../data/2026-10-21/csv/HitsData_PMT_test.csv"
     output_file = "outputs/output.csv"
     convert_geant_to_analysis(data_file, output_file)
     # charge_centroid(output_file, multiplicity=2)
     clean_folder(Path("./plots/"))
-    for idx in range(100):
+    for idx in range(1000):
         pmtID, energy, times = leggi_evento_csv(data_file, event_index=idx+1)
         if not pmtID:
             continue
-        plot_event(idx, pmtID, energy, times, min_multiplicity=5, time_window=3, SCALE=40, save=True, filename=f'./plots/2Gev_muneg_{idx}.png')
+        plot_event(idx, pmtID, energy, times, min_multiplicity=3, time_window=3, SCALE=10, save=True, filename=f'./plots/shower_{idx}.png')
     # create GIF
     image_path = Path("./plots/")
-    files = list(image_path.glob("2Gev_muneg_*.png"))
+    files = list(image_path.glob("shower_*.png"))
     files_sorted = sorted(files, key=lambda x: int(x.stem.split("_")[-1]))
     first_img = Image.open(files_sorted[0])
     images = [Image.open(f) for f in files_sorted[1:]]

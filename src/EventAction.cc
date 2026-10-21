@@ -40,7 +40,7 @@ void EventAction::EndOfEventAction(const G4Event* event) {
 
     if (pmtHitsCollection) {
         G4int nofPMTHits = pmtHitsCollection->entries();
-        G4cout << "Event " << eventID << " has " << nofPMTHits << " hits." << G4endl; // Debugging output
+        G4cout << "Event " << eventID + 1 << " has " << nofPMTHits << " hits." << G4endl; // Debugging output
 
         for (G4int i = 0; i < nofPMTHits; i++) {
             PMTHit* hit = (*pmtHitsCollection)[i];
@@ -49,7 +49,7 @@ void EventAction::EndOfEventAction(const G4Event* event) {
 
             if (pmtNumber >= 0 && pmtNumber < 19) {
                 // Fill the ntuple corresponding to the PMT number
-                analysisManager->FillNtupleIColumn(pmtNumber, 0, eventID);
+                analysisManager->FillNtupleIColumn(pmtNumber, 0, eventID + 1);
                 analysisManager->FillNtupleIColumn(pmtNumber, 1, hit->GetTrackID());
                 analysisManager->FillNtupleIColumn(pmtNumber, 2, hit->GetPMTNumber());
                 analysisManager->FillNtupleDColumn(pmtNumber, 3, hit->GetHitPosition().x() / CLHEP::mm);
@@ -86,7 +86,7 @@ void EventAction::EndOfEventAction(const G4Event* event) {
             int pmtID = pmtHits.first;
             int count = pmtHits.second;
             if (runAction->csvFile.is_open()) {
-                runAction->csvFile << eventID << "," << pmtID << "," << count << ",\"[";
+                runAction->csvFile << eventID + 1 << "," << pmtID << "," << count << ",\"[";
                 
                 auto& times = pmtHitTimes[pmtID];
                 std::sort(times.begin(), times.end());
@@ -98,9 +98,9 @@ void EventAction::EndOfEventAction(const G4Event* event) {
                 }
                 runAction->csvFile << "]\"" << "\n";
                 runAction->csvFile.flush(); // Ensure data is written to the file
-                G4cout << "Writing to CSV file for PMT" <<pmtID<< ": " << eventID << "," << count << G4endl; // Debugging output
+                G4cout << "Writing to CSV file for PMT" << pmtID << ": " << eventID + 1 << "," << count << std::endl; // Debugging output
             } else {
-                G4cerr << "Failed to write to CSV file for PMT" << pmtID<< G4endl; // Debugging output
+                G4cerr << "Failed to write to CSV file for PMT" << pmtID << G4endl; // Debugging output
             }
         }
 
@@ -108,7 +108,7 @@ void EventAction::EndOfEventAction(const G4Event* event) {
         if (runAction->totalHitsFile.is_open()) {
             runAction->totalHitsFile << eventID << "," << totalHits << "\n";
             runAction->totalHitsFile.flush(); // Ensure data is written to the file
-            G4cout << "Writing total hits to CSV file: " << eventID << "," << totalHits << G4endl; // Debugging output
+            G4cout << "Writing total hits to CSV file: " << eventID + 1 << "," << totalHits << G4endl; // Debugging output
         } else {
             G4cerr << "Failed to write to total hits CSV file" << G4endl; // Debugging output
         }

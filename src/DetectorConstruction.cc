@@ -1,7 +1,6 @@
 #include "DetectorConstruction.hh"
 #include "PMTSpherical.hh"
 #include "PMTSD.hh"
-//#include "WCDSD.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4OpticalSurface.hh"
 #include <G4LogicalVolume.hh>
@@ -135,8 +134,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     
 
     // Scale tyvek reflectivity
-    // const G4double SCALE = 0.94; // <- real one
-    const G4double SCALE = 0.0; 
+    const G4double SCALE = 0.94; // <- real one
+    // const G4double SCALE = 0.0; 
     // const G4double SCALE = 0.2;
     for (G4int ie=0; ie<sizeof(Tyvek_e)/sizeof(G4double); ie++) {
         Tyvek_r[ie] *= SCALE;
@@ -202,10 +201,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
     G4SubtractionSolid* mPMT_top_cap_container = new G4SubtractionSolid("gel_cut",gel,solidCutOffContainer); 
     G4LogicalVolume* logicalGel = new G4LogicalVolume(mPMT_top_cap_container, nist->FindOrBuildMaterial("SilGel"), "Gel");
     G4VPhysicalVolume* gelPhys = new G4PVPlacement(0, G4ThreeVector(0,0,-TankHeight/2-gel_r/10*cm+18*cm+dome_height), logicalGel, "Gel", waterLog, false, 0, false);
-    // G4VisAttributes* gelVisAttr = new G4VisAttributes(G4Color(0.0, 0.0, 1.0));
-    // gelVisAttr->SetVisibility(true);
-    // gelVisAttr->SetForceSolid(false);
-    // logicalGel->SetVisAttributes(gelVisAttr);
+    G4VisAttributes* gelVisAttr = new G4VisAttributes(G4Color(0.0, 0.0, 1.0));
+    gelVisAttr->SetVisibility(true);
+    gelVisAttr->SetForceSolid(false);
+    logicalGel->SetVisAttributes(gelVisAttr);
 
     ////////////////////
     // POM-C CYLINDER //

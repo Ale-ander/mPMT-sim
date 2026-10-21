@@ -2,6 +2,9 @@
 data/
 build/
 corsika_showers/
+photos/
+
+log.*
 
 # Cmake
 CMakeLists.txt.user

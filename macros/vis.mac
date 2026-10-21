@@ -1,5 +1,5 @@
 /vis/open OGLSQt
-/vis/viewer/set/viewpointThetaPhi 90 180
+/vis/viewer/set/viewpointThetaPhi 91 90 deg
 /vis/viewer/zoom 1.4
 /vis/drawVolume
 /vis/scene/add/axes 0 0 0 1 m

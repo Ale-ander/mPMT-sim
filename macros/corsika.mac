@@ -5,14 +5,14 @@
 /random/setSeeds 1 2
 
 /output/setSuffix test
-/output/dataPath ../
+/output/dataPath .
 
 /run/initialize
 
 /process/optical/boundary/setInvokeSD 1
 
-/corsika/file ../corsika_showers/shower.csv
-/corsika/zStart 1.7 m
-/corsika/rMax 30 m
+/corsika/file ./corsika_showers/shower7.csv
+/corsika/zStart 1.2
+/corsika/rMax 3
 
-/run/beamOn 20
+/run/beamOn 100

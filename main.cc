@@ -35,6 +35,15 @@ int main(int argc, char ** argv) {
         ui = new G4UIExecutive(argc, argv);
     }
 
+    G4VisManager* visManager = nullptr;
+    if (ui) {
+        std::cout << "Initializing visualization..." << std::endl;
+        visManager = new G4VisExecutive();
+        visManager -> Initialize();
+    }
+
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
     auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Serial);
     runManager -> SetVerboseLevel(0);
 
@@ -42,16 +51,8 @@ int main(int argc, char ** argv) {
     runManager -> SetUserInitialization(new PhysicsList());
     runManager -> SetUserInitialization(new ActionInitialization());
 
-    G4VisManager* visManager = nullptr;
     if (ui) {
-        visManager = new G4VisExecutive();
-        visManager -> Initialize();
-    }
-
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-    if (ui) {
-        UImanager -> ApplyCommand("/control/execute ../macros/vis.mac");
+        UImanager -> ApplyCommand("/control/execute ./macros/vis.mac");
     }
 
     for (const auto& macro : macros) {
